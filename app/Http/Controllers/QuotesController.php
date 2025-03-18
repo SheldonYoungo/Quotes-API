@@ -18,7 +18,7 @@ class QuotesController extends Controller
     }
 
     public function getAllQuotes(Request $request) : array{
-        $limit = 30;
+        $limit = $request->query('limit', 10);;
         $skip = $request->query('skip', 0);
         
         $page = intdiv($skip, $limit); // Ejemplo: skip=30, limit=30 => page=1
@@ -28,7 +28,6 @@ class QuotesController extends Controller
 
         // Verificar si la página está en la caché
         if (Cache::has($cacheKey)) {
-            dump(Cache::get('quotes_page_0', []));
             return Cache::get($cacheKey);
         }
 
@@ -54,7 +53,7 @@ class QuotesController extends Controller
     
         $quotes = Cache::get('quotes_all', []);
 
-        // Verificar si la cita está en la caché usando búsqueda binaria
+        // Verifica si la cita está en la caché mediante búsqueda binaria
         $index = $this->busquedaBinaria($quotes, $id);
 
         if ($index !== -1) {

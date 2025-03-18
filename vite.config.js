@@ -24,4 +24,13 @@ export default defineConfig({
           vue: 'vue/dist/vue.esm-bundler.js', // Asegúrate de usar esta versión
         },
     },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8000/api', // URL de tu servidor Laravel
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
 });
