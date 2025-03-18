@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Cache;
-use Config;
+use Illuminate\Support\Facades\Config;
 use Http;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Log;
 
-class QuotesController extends Controller
+class QuotesController
 {
     private $uri;
 
     public function __construct() {
-        $this->uri = config('quotes.url');
+        $this->uri = Config::get('quotes.url');
     }
 
     public function getAllQuotes(Request $request) : array{
@@ -53,11 +53,11 @@ class QuotesController extends Controller
         return $response->json();
     }
 
-    public function getQuote(int $id) {
+    public function getQuote($id) {
         try {
 
-            if($id < 0) {
-                return response()->json(['error' => 'Index out of bound. You can only use positive IDs'], 500);
+            if($id <= 0 || (!is_int($id) && intval($id) != $id)) {
+                return response()->json(['error' => 'Index not valid. The value must be an positive integer greater than zero.'], 400);
             }
 
             $quotes = Cache::get('quotes_all', []);

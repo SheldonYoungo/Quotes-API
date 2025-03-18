@@ -32,7 +32,7 @@
     },
     methods: {
       closeModal() {
-        this.$emit("close"); // Emite un evento para cerrar el modal
+        this.$emit("close"); // Emitir evento para cerrar el modal
       },
     },
   };

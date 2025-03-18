@@ -20,7 +20,7 @@ export function useQuotes() {
   // Cargar las citas
   const fetchQuotes = async () => {
     try {
-      const response = await axios.get("/api/quote", {
+      const response = await axios.get("http://localhost:8000/api/quote", {
         params: {
           skip: skip.value,
         },
@@ -34,7 +34,7 @@ export function useQuotes() {
   // Obtener una cita aleatoria
   const fetchRandomQuote = async () => {
     try {
-      const response = await axios.get("/api/quote/random");
+      const response = await axios.get("http://localhost:8000/api/quote/random");
       selectedQuote.value = response.data;
       clearErrorMessage(); 
     } catch (error) {
@@ -50,7 +50,7 @@ export function useQuotes() {
     }
 
     try {
-      const response = await axios.get(`/api/quote/${quoteId.value}`);
+      const response = await axios.get(`http://localhost:8000/api/quote/${quoteId.value}`);
       if (response.data) {
         selectedQuote.value = response.data;
         clearErrorMessage(); 

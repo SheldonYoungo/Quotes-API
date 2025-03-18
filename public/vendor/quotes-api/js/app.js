@@ -1,6 +1,5 @@
 import './bootstrap';
-import '../css/app.css';
-import { createApp } from 'vue';
+import { createApp } from 'vue'; // Importa Vue 3
 import Quotes from './components/Quotes.vue';
 
 
