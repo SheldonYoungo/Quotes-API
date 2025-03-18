@@ -55,7 +55,7 @@ Para correr este proyecto, se necesita agregar las siguiente variables de entorn
 
 `RATE_LIMIT` -- Límite de peticiones al servidor
 
-`RATE_LIMIT_DURATION` -- Ventana de tiempo para recibir peticiones
+`RATE_LIMIT_DURATION` -- Ventana de tiempo para recibir peticiones en segundos
 
 
 ## 🛫 Rutas
