@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function ($request) {
             return Limit::perMinutes(
                 config('quotes.windowTime'), 
-                config('quotes.limitRequest')     
+                config('quotes.limitRequest') / 60      
             )->by(optional($request->user())->id ?: $request->ip());
         });
 
