@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         // Limitar peticiones a la API
         RateLimiter::for('api', function ($request) {
             return Limit::perMinutes(
-                config('quotes.windowTime') / 60, 
+                config('quotes.windowTime'), 
                 config('quotes.limitRequest')     
             )->by(optional($request->user())->id ?: $request->ip());
         });
