@@ -2,21 +2,22 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
-use Request;
 use Throwable;
 
-class Handler extends \Illuminate\Foundation\Exceptions\Handler
+class Handler extends ExceptionHandler
 {
-    public function render($request, Throwable $exception) {
-        if($exception instanceof ThrottleRequestsException) {
 
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ThrottleRequestsException) {
+            $retryAfter = $exception->getHeaders()['Retry-After'] ?? 60; // Tiempo de espera en segundos
             return response()->json([
-                'message' => 'Has excedido el límite de peticiones. Por favor, intenta de nuevo en ' . $exception->getHeaders()['Retry-After'] . ' segundos.',
-            ], 429);
+                'message' => 'Has excedido el límite de peticiones. Por favor, intenta de nuevo en ' . $retryAfter . ' segundos.',
+            ], 429)->header('Retry-After', $retryAfter);
         }
-
+    
         return parent::render($request, $exception);
     }
 }

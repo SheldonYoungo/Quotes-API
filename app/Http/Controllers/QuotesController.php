@@ -18,30 +18,34 @@ class QuotesController extends Controller
     }
 
     public function getAllQuotes(Request $request) : array{
-        $limit = $request->query('limit', 10);;
-        $skip = $request->query('skip', 0);
-        
-        $page = intdiv($skip, $limit); // Ejemplo: skip=30, limit=30 => page=1
-
-        // Crear una clave única para la página
-        $cacheKey = "quotes_page_$page";
-
-        // Verificar si la página está en la caché
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+        try{
+            $limit = $request->query('limit', 10);;
+            $skip = $request->query('skip', 0);
+            
+            $page = intdiv($skip, $limit); // Ejemplo: skip=30, limit=30 => page=1
+    
+            // Crear una clave única para la página
+            $cacheKey = "quotes_page_$page";
+    
+            // Verificar si la página está en la caché
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+    
+            // Obtener las citas de la API con paginación
+            $response = Http::get($this->uri, [
+                'skip' => $skip,
+                'limit' => $limit,
+            ]);
+            $quotes = $response->json();
+    
+            // Almacenar la página en la caché
+            Cache::put($cacheKey, $quotes, now()->addMinutes(30)); // Cache por 1 hora
+    
+            return $quotes;
+        } catch(\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching the quotes'], 500);
         }
-
-        // Obtener las citas de la API con paginación
-        $response = Http::get($this->uri, [
-            'skip' => $skip,
-            'limit' => $limit,
-        ]);
-        $quotes = $response->json();
-
-        // Almacenar la página en la caché
-        Cache::put($cacheKey, $quotes, now()->addMinutes(30)); // Cache por 1 hora
-
-        return $quotes;
     }
 
     public function getRandomQuote()  {
@@ -49,28 +53,37 @@ class QuotesController extends Controller
         return $response->json();
     }
 
-    public function getQuote(int $id) : array {
+    public function getQuote(int $id) {
+        try {
+
+            if($id < 0) {
+                return response()->json(['error' => 'Index out of bound. You can only use positive IDs'], 500);
+            }
+
+            $quotes = Cache::get('quotes_all', []);
     
-        $quotes = Cache::get('quotes_all', []);
-
-        // Verifica si la cita está en la caché mediante búsqueda binaria
-        $index = $this->busquedaBinaria($quotes, $id);
-
-        if ($index !== -1) {
-            return $quotes[$index];
+            // Verifica si la cita está en la caché mediante búsqueda binaria
+            $index = $this->busquedaBinaria($quotes, $id);
+    
+            if ($index !== -1) {
+                return $quotes[$index];
+            }
+    
+            // Si no está en la cita en caché, se obtiene de la API
+            $response = Http::get($this->uri . '/' . $id);
+            $quote = $response->json();
+    
+            if ($quote) {
+                // Agregar la cita a la caché en orden numérico
+                $quotes = $this->insertQuoteInOrder($quotes, $quote);
+                Cache::put('quotes_all', $quotes, now()->addHours(1)); // Actualizar la caché
+            }
+    
+            return $quote;
+        } catch(\Exception $e) {
+            return response()->json(['error' => 'Quote not found. Try with a different ID'], 500);
         }
-
-        // Si no está en la cita en caché, se obtiene de la API
-        $response = Http::get($this->uri . '/' . $id);
-        $quote = $response->json();
-
-        if ($quote) {
-            // Agregar la cita a la caché en orden numérico
-            $quotes = $this->insertQuoteInOrder($quotes, $quote);
-            Cache::put('quotes_all', $quotes, now()->addHours(1)); // Actualizar la caché
-        }
-
-        return $quote;
+    
     }
     
     // Función que se encarga de buscar una cita en el arreglo de citas
