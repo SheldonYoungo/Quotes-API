@@ -4,13 +4,15 @@
 API creada como prueba técnica que mediante la API dummyJSON extrae citas de diferentes autores y las muestra en pantalla.
 
 ## 📄 Tabla de Contenidos
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+- [Instalación](#instalacion)
+- [Variables de entorno](#variables-de-entorno)
+- [Rutas](#rutas)
+- [Pruebas](#pruebas)
+- [Consideraciones](#consideraciones)
+- [Tech Stack](#tech-stack)
 
 
-## 💨 Instalación
+##  Instalacion
 
 Para hacer deploy de esta API primero abre la terminal y  clona el proyecto en  la carpeta que prefieras.
 
@@ -47,7 +49,7 @@ Y ya está listo para poder hacer el deploy.
 
 
 
-## 🔒 Variables de entorno
+## Variables de entorno
 
 Para correr este proyecto, se necesita agregar las siguiente variables de entorno a tu archivo .env.
 
@@ -58,7 +60,7 @@ Para correr este proyecto, se necesita agregar las siguiente variables de entorn
 `RATE_LIMIT_DURATION` -- Ventana de tiempo para recibir peticiones en segundos
 
 
-## 🛫 Rutas
+## Rutas
 
 - `/quotes-ui` Ruta para ver la UI de la aplicación.
 - `/api/quotes` Obtiene todas la citas hasta un máximo de 10 por defecto.
@@ -68,7 +70,7 @@ Para correr este proyecto, se necesita agregar las siguiente variables de entorn
 - `/api/quotes/{id}` Obtiene una cita específica en base a su id (número entero positivo). De no conseguirla devuelve un error.
 
 
-## ♻️ Pruebas
+##  Pruebas
 
 Para correr las pruebas basta con utilizar el comando de la terminal
 
@@ -77,7 +79,7 @@ Para correr las pruebas basta con utilizar el comando de la terminal
 ```
 
 
-## 📒 Consideraciones
+##  Consideraciones
 
 En caso de querer modificar el frontend . Todos los archivos de las vista se encuentran en la ruta `/resources/js`. Allí encontrarás todos los componentes de la vista.
 
@@ -94,8 +96,7 @@ Y para publicar los assets del frontend usa el comando:
 ```
 
 
-
-## 💻 Tech Stack
+##  Tech Stack
 
 - Laravel
 - Vue.js
