@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Publicar activos
         $this->publishAssets();
+
+        $this->app->singleton(\App\Services\QuoteService::class, function ($app) {
+            return new \App\Services\QuoteService();
+        });
     }
 
     /**
