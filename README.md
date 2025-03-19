@@ -5,9 +5,11 @@ API creada como prueba técnica que mediante la API dummyJSON extrae citas de di
 
 ## 📄 Tabla de Contenidos
 - [Instalación](#instalación)
-- [Uso](#uso)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+- [Uso](#variables-de-entorno)
+- [Rutas](#rutas)
+- [Pruebas](#pruebas)
+- [Consideraciones](#consideraciones)
+- [Tech Stack](#tech-stack)
 
 
 ## 💨 Instalación
