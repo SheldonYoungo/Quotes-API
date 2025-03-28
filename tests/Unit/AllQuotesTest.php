@@ -2,33 +2,38 @@
 
 namespace Tests\Unit;
 
-use App\Http\Controllers\QuotesController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Http\Request;
+use Mockery;
+use QuotesApiPackage\Http\Controllers\QuotesController;
+use QuotesApiPackage\Services\QuoteService;
 
-class AllQuotesTest extends TestCase
-{
+// Prueba de controlador para obtener todas las quotes
 
-    #[Test]
-    public function get_all_quotes_test(): void
-    {
-        $controller = new QuotesController();
-        $request = Request::create('/api/quote', 'GET', ['limit' => 10, 'skip' => 0]);
+it('retrieves all quotes', function () {
+    
+    $mockQuotesService = Mockery::mock(QuoteService::class)
+        ->shouldReceive('getAllQuotes')
+        ->andReturn([
+            'quotes' => [], 
+            'total' => 0, 
+            'limit' => 10, 
+            'skip' => 0
+        ])
+        ->getMock();
 
-        Http::fake([
-            '*' => Http::response(['quotes' => [], 'total' => 0, 'limit' => 10, 'skip' => 0], 200)
-        ]);
+    $controller = new QuotesController($mockQuotesService);
 
-        $response = $controller->getAllQuotes($request);
+    $request = Request::create('/api/quote', 'GET', ['limit' => 10, 'skip' => 0]);
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('quotes', $response);
-        $this->assertArrayHasKey('total', $response);
-        $this->assertArrayHasKey('limit', $response);
-        $this->assertArrayHasKey('skip', $response);
-    }
-}
+    Http::fake([
+        '*' => Http::response(['quotes' => [], 'total' => 0, 'limit' => 10, 'skip' => 0], 200)
+    ]);
+
+    $response = $controller->getAllQuotes($request);
+
+    expect($response->getStatusCode())->toBe(200);
+
+    expect($response->getData())->toBeObject()
+        ->toHaveKeys(['quotes', 'total', 'limit', 'skip']);
+});

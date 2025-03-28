@@ -2,43 +2,51 @@
 
 namespace Tests\Unit;
 
-use App\Http\Controllers\QuotesController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Http\JsonResponse;
+use Mockery;
+use QuotesApiPackage\Http\Controllers\QuotesController;
+use QuotesApiPackage\Services\QuoteService;
 
-class GetQuoteTest extends TestCase
-{
-    public function test_get_quote()
-    {
-        $controller = new QuotesController();
+// Prueba de controlador para obtener una quote específica
 
-        Http::fake([
-            '*' => Http::response(['id' => 1, 'quote' => 'Test quote', 'author' => 'Test author'], 200)
+it('retrieves a specific quote', function () {
+    $mockQuotesService = Mockery::mock(QuoteService::class)
+        ->shouldReceive('getQuote')
+        ->andReturn([
+            'id' => 1, 
+            'quote' => 'Test quote',
+            'author' => 'Test author' 
+        ])
+        ->getMock();
+        
+    $controller = new QuotesController($mockQuotesService);
+
+    Http::fake([
+        '*' => Http::response(['id' => 1, 'quote' => 'Test quote', 'author' => 'Test author'], 200)
+    ]);
+
+    $response = $controller->getQuote(1);
+    $responseData = $response->getData(true);
+
+    expect($responseData)->toBeArray()
+        ->toHaveKeys(['id', 'quote', 'author']);
+});
+
+it('returns an error for an invalid quote ID', function () {
+    $mockQuotesService = Mockery::mock(QuoteService::class)
+        ->shouldReceive('getQuote')
+        ->with(-1)
+        ->andThrow(new \InvalidArgumentException('Index not valid. The value must be an positive integer greater than zero.'))
+        ->getMock();
+
+    $controller = new QuotesController($mockQuotesService);
+
+    $response = $controller->getQuote(-1);
+
+    expect($response)->toBeInstanceOf(JsonResponse::class)
+        ->and($response->getStatusCode())->toBe(400)
+        ->and($response->getData(true))->toMatchArray([
+            'error' => 'Index not valid. The value must be an positive integer greater than zero.'
         ]);
-
-        $response = $controller->getQuote(1);
-
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('id', $response);
-        $this->assertArrayHasKey('quote', $response);
-        $this->assertArrayHasKey('author', $response);
-    }
-
-    public function test_get_quote_with_invalid_id()
-    {
-        $controller = new QuotesController();
-
-        $response = $controller->getQuote(-1);
-
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(400, $response->status());
-        $this->assertEquals(['error' => 'Index not valid. The value must be an positive integer greater than zero.'], $response->getData(true));
-    }
-
-
-}
+});

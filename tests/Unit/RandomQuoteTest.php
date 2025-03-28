@@ -2,32 +2,33 @@
 
 namespace Tests\Unit;
 
-use App\Http\Controllers\QuotesController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Mockery;
+use QuotesApiPackage\Http\Controllers\QuotesController;
+use QuotesApiPackage\Services\QuoteService;
 
-class RandomQuoteTest extends TestCase
-{
-    /**
-     * A basic unit test example.
-     */
-    public function test_get_random_quote()
-    {
-        $controller = new QuotesController();
+// Prueba de controlador para obtener una quote aleatoria
 
-        Http::fake([
-            '*' => Http::response(['id' => 1, 'quote' => 'Test quote', 'author' => 'Test author'], 200)
-        ]);
+it('retrieves a random quote', function () {
+    $mockQuotesService = Mockery::mock(QuoteService::class)
+        ->shouldReceive('getRandomQuote')
+        ->andReturn([
+            'id' => 1, 
+            'quote' => 'Test quote',
+            'author' => 'Test author' 
+        ])
+        ->getMock();
+        
+    $controller = new QuotesController($mockQuotesService);
 
-        $response = $controller->getRandomQuote();
+    Http::fake([
+        '*' => Http::response(['id' => 1, 'quote' => 'Test quote', 'author' => 'Test author'], 200)
+    ]);
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('id', $response);
-        $this->assertArrayHasKey('quote', $response);
-        $this->assertArrayHasKey('author', $response);
-    }
-}
+    $response = $controller->getRandomQuote();
+
+    expect($response->getStatusCode())->toBe(200);
+
+    expect($response->getData())->toBeObject()
+        ->toHaveKeys(['id', 'quote', 'author']);
+});
