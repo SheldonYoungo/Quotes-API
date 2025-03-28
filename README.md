@@ -1,16 +1,16 @@
 
-# 📖 Quotes API
+# Quotes API 📖
 
 API creada como prueba técnica que mediante la API dummyJSON extrae citas de diferentes autores y las muestra en pantalla.
 
-## 📄 Tabla de Contenidos
+## Tabla de Contenidos 📄
 - [Instalación](#instalación)
 - [Rutas](#rutas)
 - [Pruebas](#pruebas)
 - [Consideraciones](#consideraciones)
 
 
-## 💨 Instalación
+## Instalación 💨
 
 Para instalar el paquete en tu proyecto de Laravel, copia la url de este repositorio y en tu archivo composer.json añadirás los siguiente:
 
@@ -43,7 +43,7 @@ Una vez hecho esto, abre la terminal y escribe el siguiente comando
 
 Siguiendo estos pasos ya puedes acceder a las rutas del paquete sin ningún problema. Para ver las solo ejecuta el comando `php artisan route:list`
 
-## 🛫 Rutas
+## Rutas 🛫
 
 - `/quotes-ui` Ruta para ver la UI de la aplicación. Solo disponible en ambiente de desarrollo ([click aquí para ver más](#consideraciones)).
 - `/api/quotes` Obtiene todas la citas hasta un máximo de 10 por defecto.
@@ -53,11 +53,11 @@ Siguiendo estos pasos ya puedes acceder a las rutas del paquete sin ningún prob
 - `/api/quotes/{id}` Obtiene una cita específica en base a su id (número entero positivo). De no conseguirla devuelve un error.
 
 
-## ♻️ Pruebas
+## Pruebas ♻️
 
 Para correr las pruebas del paquete primero se debe clonar el repositorio, luego instalar todas utilizar el comando de la terminal `composer install` y finalmente ejecutar el comando `vendor/bin/pest`.
 
-## 📒 Consideraciones
+## Consideraciones 📒
 
 
 - Si quieres acceder a la vista de la ruta (quotes-ui) es necesario abrir una terminal nueva y ejecutar el siguiente comando `npm run dev` y acceder en el navegador a la ruta `/quotes-ui`.
@@ -69,7 +69,7 @@ Para correr las pruebas del paquete primero se debe clonar el repositorio, luego
       ```
   Esto publicará los assets en la ruta `/resources/vendor/quotes-api-package` para que puedan ser modificados.
 
-## 💻 Tech Stack
+## Tech Stack 💻
 
 - Laravel
 - Vue
