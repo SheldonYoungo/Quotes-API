@@ -3,6 +3,7 @@
 
 API creada como prueba técnica que mediante la API dummyJSON extrae citas de diferentes autores y las muestra en pantalla.
 
+
 ## Tabla de Contenidos 
 - [Instalación](#instalación)
 - [Rutas](#rutas)
@@ -57,6 +58,7 @@ Siguiendo estos pasos ya puedes acceder a las rutas del paquete sin ningún prob
 
 Para correr las pruebas del paquete primero se debe clonar el repositorio, luego instalar todas utilizar el comando de la terminal `composer install` y finalmente ejecutar el comando `vendor/bin/pest`.
 
+
 ## Consideraciones
 
 
@@ -68,14 +70,10 @@ Para correr las pruebas del paquete primero se debe clonar el repositorio, luego
           php artisan vendor:publish --tag=views
       ```
   Esto publicará los assets en la ruta `/resources/vendor/quotes-api-package` para que puedan ser modificados.
+  
 
 ## Tech Stack
 
 - Laravel
 - Vue
 - Pest
-
-- Laravel
-- Vue.js
-
-
