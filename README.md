@@ -5,62 +5,47 @@ API creada como prueba técnica que mediante la API dummyJSON extrae citas de di
 
 ## 📄 Tabla de Contenidos
 - [Instalación](#instalación)
-- [Uso](#uso)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+- [Rutas](#rutas)
+- [Pruebas](#pruebas)
+- [Consideraciones](#consideraciones)
 
 
 ## 💨 Instalación
 
-Para hacer deploy de esta API primero abre la terminal y  clona el proyecto en  la carpeta que prefieras.
+Para instalar el paquete en tu proyecto de Laravel, copia la url de este repositorio y en tu archivo composer.json añadirás los siguiente:
 
-Una vez hecho esto, entra en ella y ejecuta el comando
-
-```bash
-  composer install
+```
+"repositories": {
+        "sheldonyoungo/quotes-api-package": {
+            "type": "vcs",
+            "url" : "https://github.com/SheldonYoungo/Quotes-API.git"
+        }
+        
+    },
 ```
 
-Seguido de esto, instala los node_modules y construye el paquete con los assets de la vista de Vue.js
-
-```bash
-  npm install && npm run build
+O en caso de que quieras clonar el repositorio, coloca:
+```
+"repositories": {
+        "sheldonyoungo/quotes-api-package": {
+            "type": "path",
+            "url" : "[ruta--de-instalacion]/quotes-api-package"
+        }
+        
+    },
 ```
 
-Luego de esto asegurate de haber creado el archivo .env con las configuraciones de la app. Se recomienda tomar de ejemplo el .env.example que viene al clonar el repo y luego generar la app_key mediante el comando:
+Una vez hecho esto, abre la terminal y escribe el siguiente comando
 
 ```bash
-  php artisan key:generate
+  composer require sheldonyoungo/quotes-api-package
 ```
 
-Una vez hecho este paso, se publica el paquete de Laravel en la carpeta public mediante el comando
-
-```bash
-  php artisan vendor:publish --tag=public
-```
-
-Y ya está listo para poder hacer el deploy.
-
-```bash
-  php artisan serve
-```
-
-
-
-
-## 🔒 Variables de entorno
-
-Para correr este proyecto, se necesita agregar las siguiente variables de entorno a tu archivo .env.
-
-`API_BASE_URL` -- Url de la API DummyJSON (https://dummyjson.com/quotes)
-
-`RATE_LIMIT` -- Límite de peticiones al servidor
-
-`RATE_LIMIT_DURATION` -- Ventana de tiempo para recibir peticiones en segundos
-
+Siguiendo estos pasos ya puedes acceder a las rutas del paquete sin ningún problema. Para ver las solo ejecuta el comando `php artisan route:list`
 
 ## 🛫 Rutas
 
-- `/quotes-ui` Ruta para ver la UI de la aplicación.
+- `/quotes-ui` Ruta para ver la UI de la aplicación. Solo disponible en ambiente de desarrollo ([click aquí para ver más](#consideraciones)).
 - `/api/quotes` Obtiene todas la citas hasta un máximo de 10 por defecto.
     - `?skip={cantidad-a-saltar}` Parametro para saltar cierta cantidad de citas.
     - `?limit={cantidad-a-limitar}` Parametro para limitar la cantidad de citas obtenidas
@@ -70,32 +55,25 @@ Para correr este proyecto, se necesita agregar las siguiente variables de entorn
 
 ## ♻️ Pruebas
 
-Para correr las pruebas basta con utilizar el comando de la terminal
-
-```bash
-  php artisan test
-```
-
+Para correr las pruebas del paquete primero se debe clonar el repositorio, luego instalar todas utilizar el comando de la terminal `composer install` y finalmente ejecutar el comando `vendor/bin/pest`.
 
 ## 📒 Consideraciones
 
-En caso de querer modificar el frontend . Todos los archivos de las vista se encuentran en la ruta `/resources/js`. Allí encontrarás todos los componentes de la vista.
 
-Si quieres probar la vista en desarrollo basta con ejecutar el comando y acceder a la ruta ya descrita para la UI:
+- Si quieres acceder a la vista de la ruta (quotes-ui) es necesario abrir una terminal nueva y ejecutar el siguiente comando `npm run dev` y acceder en el navegador a la ruta `/quotes-ui`.
 
-``` bash
-    npm run dev
-```
+- En caso de querer modificar la UI del paquete es necesario publicar los assets y la vista principal, esto se logra con el comando:
 
-Y para publicar los assets del frontend usa el comando:
-
-```bash
-    npm run build
-```
-
-
+      ``` bash
+          php artisan vendor:publish --tag=views
+      ```
+  Esto publicará los assets en la ruta `/resources/vendor/quotes-api-package` para que puedan ser modificados.
 
 ## 💻 Tech Stack
+
+- Laravel
+- Vue
+- Pest
 
 - Laravel
 - Vue.js
