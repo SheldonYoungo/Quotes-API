@@ -3,6 +3,7 @@
     "description": "A Laravel package for retrieving quotes from an external API.",
     "type": "library",
     "license": "MIT",
+    "version": "1.0.0",
     "autoload": {
         "psr-4": {
             "QuotesApiPackage\\": "src/"
